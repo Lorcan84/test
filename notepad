@@ -18,7 +18,7 @@ $shell = New-Object -ComObject WScript.Shell
 $shortcut = $shell.CreateShortcut($startupPath)
 
 # Pfad und Argumente für die Verknüpfung setzen
-$shortcut.TargetPath = $Path
+$shortcut.TargetPath = $runpath
 $shortcut.WorkingDirectory = [System.IO.Path]::GetDirectoryName($Path)
 $shortcut.Save()
 
