@@ -11,5 +11,5 @@ Invoke-WebRequest -Uri $url -OutFile $output
 Write-Output "Datei wurde erfolgreich heruntergeladen und gespeichert unter $output"
 
 
-Unblock-File -Path 
-Start-Process -Filepath
+Unblock-File -Path $output
+Start-Process -Filepath $output
