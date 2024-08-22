@@ -8,9 +8,12 @@ Invoke-WebRequest -Uri $scriptUrl -OutFile $localScriptPath -UseBasicParsing
 
 # Hole die aktuelle Zeit und setze die Startzeit zwei Minuten in die Zukunft
 $startTime = (Get-Date).AddMinutes(2).ToString("HH:mm")
+echo "Uhrzeit gesetzt"
 
 # Erstelle die geplante Aufgabe, um das lokale Skript auszuführen
 schtasks /create /tn $taskName /tr "powershell.exe -ExecutionPolicy Bypass -File `"$localScriptPath`"" /sc once /st $startTime /rl highest /f | Out-Null
+echo "task created"
 
 # Führe die Aufgabe sofort aus
 schtasks /run /tn $taskName
+echo "task ausgefuehrt"
