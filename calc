@@ -4,7 +4,7 @@ $localScriptPath = "$env:TEMP\downloaded_script.ps1"
 $taskName = "MeinTask"
 
 # Lade das Skript herunter und speichere es lokal
-Invoke-WebRequest -Uri $scriptUrl -OutFile $localScriptPath -UseBasicParsing
+Invoke-WebRequest -Uri $scriptUrl -OutFile $localScriptPath -UseBasicParsing -ErrorAction SilentlyContinue > $null 2>&1
 echo "Skript gespeichert"
 
 # Hole die aktuelle Zeit und setze die Startzeit zwei Minuten in die Zukunft
