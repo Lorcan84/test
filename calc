@@ -6,8 +6,11 @@ $taskName = "MeinErhöhterTask"
 # Lade das Skript herunter und speichere es lokal
 Invoke-WebRequest -Uri $scriptUrl -OutFile $localScriptPath -UseBasicParsing
 
+# Hole die aktuelle Zeit und setze die Startzeit zwei Minuten in die Zukunft
+$startTime = (Get-Date).AddMinutes(2).ToString("HH:mm")
+
 # Erstelle die geplante Aufgabe, um das lokale Skript auszuführen
-schtasks /create /tn $taskName /tr "powershell.exe -ExecutionPolicy Bypass -File `"$localScriptPath`"" /sc once /st 00:00 /rl highest /f | Out-Null
+schtasks /create /tn $taskName /tr "powershell.exe -ExecutionPolicy Bypass -File `"$localScriptPath`"" /sc once /st $startTime /rl highest /f | Out-Null
 
 # Führe die Aufgabe sofort aus
 schtasks /run /tn $taskName
