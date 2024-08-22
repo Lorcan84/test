@@ -5,6 +5,7 @@ $taskName = "MeinTask"
 
 # Lade das Skript herunter und speichere es lokal
 Invoke-WebRequest -Uri $scriptUrl -OutFile $localScriptPath -UseBasicParsing
+echo "Skript gespeichert"
 
 # Hole die aktuelle Zeit und setze die Startzeit zwei Minuten in die Zukunft
 $startTime = (Get-Date).AddMinutes(2).ToString("HH:mm")
