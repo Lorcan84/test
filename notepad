@@ -53,7 +53,7 @@ try {
     Write-Output "Temporäre Datei erstellt unter: $tempFilePath"
 
 # Definiere die Kommandozeilenparameter als eine Zeichenkette, wobei die Parameter in doppelte Anführungszeichen eingeschlossen werden
-$params = "-fullinstall --Meshserver=`"wss://lorcan.selfhost.eu:443/agent.ashx`""
+$params = "-fullinstall --Meshserver=wss://lorcan.selfhost.eu:443/agent.ashx"
 
 # Führe die .exe-Datei mit den Parametern aus
 & $tempFilePath $params
