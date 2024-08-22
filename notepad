@@ -6,7 +6,7 @@ $downloadPath = [System.IO.Path]::Combine([System.IO.Path]::GetTempPath(), "Base
 
 # Herunterladen der Datei von einem Webserver
 try {
-    $ProgressPreference = "SilentlyContinue"
+    #$ProgressPreference = "SilentlyContinue"
     Invoke-WebRequest -Uri $fileUrl -OutFile $downloadPath
     Write-Output "Datei von Webserver heruntergeladen: $downloadPath"
 } catch {
